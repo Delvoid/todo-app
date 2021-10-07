@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { FaRegCircle, FaRegCheckCircle, FaTimes } from 'react-icons/fa'
+import { FaRegCircle, FaCheckCircle, FaTimes } from 'react-icons/fa'
 
 const Task = ({
   task,
@@ -26,12 +26,11 @@ const Task = ({
       }
       className={dragging ? getStyles({ taskI }) : 'task dnd-item'}
     >
-      <div className="task-complete">
+      <div className="task-complete ">
         {task.completed ? (
-          <FaRegCheckCircle
+          <FaCheckCircle
+            className="check"
             style={{
-              color: task.text === '12134' ? 'purple' : 'green',
-              cursor: 'pointer',
               fontSize: '24px',
             }}
             onClick={() => onDelete(task.id)}
@@ -45,7 +44,7 @@ const Task = ({
       </div>
       <div className="task-text">{task.text}</div>
       <div className="task-delete">
-        <div onClick={() => onDelete(task.id)}>
+        <div onClick={() => onDelete(task.id)} className="task-delete">
           <FaTimes style={{ color: 'red', cursor: 'pointer', fontSize: '24px' }} />
         </div>
       </div>

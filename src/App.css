@@ -44,16 +44,21 @@
   align-items: center;
 }
 .task-text {
+  font-size: 14px;
+  font-weight: 500;
   display: flex;
   justify-content: start;
 }
 .task-delete {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
+  justify-items: center;
 }
 
 .task-complete {
-  text-align: start;
+  display: flex;
+  justify-content: start;
+  justify-items: center;
 }
 
 .categories {
@@ -102,4 +107,10 @@
 }
 .over {
   background-color: #eaeaea;
+}
+
+.check {
+  background-color: #fff;
+  border-radius: 50%;
+  color: #173588;
 }
