@@ -13,6 +13,7 @@ const Task = ({
   priorities,
   categories,
 }) => {
+  const [deleting, setDeleting] = useState(false)
   return (
     <li
       draggable
@@ -26,7 +27,7 @@ const Task = ({
             }
           : null
       }
-      className={dragging ? getStyles({ taskI }) : 'task dnd-item'}
+      className={`task dnd-item ${dragging ? getStyles({ taskI }) : ''} ${deleting ? 'fade' : ''}`}
     >
       <div className="task-complete ">
         {task.completed ? (
@@ -46,7 +47,14 @@ const Task = ({
       </div>
       <div className="task-text">{task.text}</div>
       <div className="task-delete">
-        <div onClick={() => onDelete(task.id)} className="task-delete">
+        <div
+          onClick={() => {
+            setDeleting(true)
+            setTimeout(() => onDelete(task.id), 200)
+            // onDelete(task.id)
+          }}
+          className="task-delete"
+        >
           <FaTrashAlt style={{ color: '#d8000c', cursor: 'pointer', fontSize: '18px' }} />
         </div>
       </div>
