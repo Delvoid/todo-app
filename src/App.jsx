@@ -1,16 +1,23 @@
 import { useState, useEffect } from 'react'
 
+import AddTask from './components/AddTask'
+
 import Tasks from './components/Tasks'
 
 import './App.css'
 
+const prioritiesDefault = [
+  { name: 'High', color: '#FF0000' },
+  { name: 'Medium', color: '#FFFF00' },
+  { name: 'Low', color: '#00FF00' },
+]
+const categoriesDefault = [
+  { name: 'Personal', color: '#b619dc' },
+  { name: 'Work', color: '#2a70dc' },
+]
+
 function App() {
   const [tasks, setTasks] = useState([])
-
-  // FORM
-  const [submited, setSubmited] = useState(false)
-  const [text, setText] = useState('')
-  const [textError, setTextError] = useState({})
 
   useEffect(() => {
     const getTasks = () => {
@@ -29,8 +36,6 @@ function App() {
   const addTask = (task) => {
     setTasks([...tasks, task])
     localStorage.setItem('tasks', JSON.stringify([...tasks, task]))
-    setText('')
-    setSubmited(false)
   }
   const completeTask = (task) => {
     const completeTask = tasks.map((t) =>
@@ -46,78 +51,18 @@ function App() {
     setTasks(deleteTask)
     localStorage.setItem('tasks', JSON.stringify([...deleteTask]))
   }
-  const onSubmit = (e) => {
-    e.preventDefault()
-    setSubmited(true)
-
-    const isValid = formValidation()
-    const task = {
-      id: generateId(16),
-      text,
-      completed: false,
-      creadted_at: new Date(),
-    }
-    if (isValid) {
-      addTask(task)
-    }
-  }
-
-  const generateId = () => {
-    return tasks.length + randomString(16)
-  }
-
-  const randomString = (length) => {
-    return [...Array(length)].map((i) => (Math.random() * 36).toString(36)).join('')
-  }
-
-  const formValidation = () => {
-    let isValid = true
-
-    isValid = textValidation(text)
-
-    return isValid
-  }
-
-  const textValidation = (text) => {
-    let isValid = true
-    const textError = {}
-    if (text.trim().length < 5) {
-      textError.textShort = 'Text is too short'
-      isValid = false
-    }
-    if (text.trim().length > 60) {
-      textError.textShort = 'Text is too long'
-      isValid = false
-    }
-
-    setTextError(textError)
-
-    return isValid
-  }
 
   return (
     <div className="App">
       <div className="container">
         <header className="header">TODO</header>
-        <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <label>Task</label>
-            <input
-              type="text"
-              placeholder="Add Text"
-              value={text}
-              onChange={(e) => {
-                setText(e.target.value)
-                submited && textValidation(e.target.value)
-              }}
-            />
-          </div>
 
-          {Object.keys(textError).map((key) => {
-            return <div key={textError[key]}>{textError[key]}</div>
-          })}
-          <input type="submit" value="Save Task" className="btn btn-block" />
-        </form>
+        <AddTask
+          addTask={addTask}
+          tasks={tasks}
+          categoriesDefault={categoriesDefault}
+          prioritiesDefault={prioritiesDefault}
+        />
         <section>
           <header className="text-primary tasks-header">Categories</header>
           <div className="categories">
@@ -144,6 +89,8 @@ function App() {
               onDelete={deleteTask}
               onComplete={completeTask}
               setTasks={setTasks}
+              categoriesDefault={categoriesDefault}
+              prioritiesDefault={prioritiesDefault}
             />
           ) : (
             'No Tasks'

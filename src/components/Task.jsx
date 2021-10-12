@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { FaRegCircle, FaCheckCircle, FaTimes } from 'react-icons/fa'
+import { FaRegCircle, FaCheckCircle, FaTrashAlt } from 'react-icons/fa'
 
 const Task = ({
   task,
@@ -10,6 +10,8 @@ const Task = ({
   handleDragStart,
   handleDragEnter,
   getStyles,
+  priorities,
+  categories,
 }) => {
   return (
     <li
@@ -33,19 +35,19 @@ const Task = ({
             style={{
               fontSize: '24px',
             }}
-            onClick={() => onDelete(task.id)}
+            onClick={() => onComplete(task)}
           />
         ) : (
           <FaRegCircle
-            style={{ color: 'purple', cursor: 'pointer', fontSize: '24px' }}
-            onClick={() => onDelete(task.id)}
+            style={{ color: categories[task.category].color, cursor: 'pointer', fontSize: '24px' }}
+            onClick={() => onComplete(task)}
           />
         )}
       </div>
       <div className="task-text">{task.text}</div>
       <div className="task-delete">
         <div onClick={() => onDelete(task.id)} className="task-delete">
-          <FaTimes style={{ color: 'red', cursor: 'pointer', fontSize: '24px' }} />
+          <FaTrashAlt style={{ color: '#d8000c', cursor: 'pointer', fontSize: '18px' }} />
         </div>
       </div>
     </li>

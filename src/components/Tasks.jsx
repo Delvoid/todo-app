@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import Task from './Task'
 
-const Tasks = ({ tasks, onDelete, onComplete, setTasks }) => {
+const Tasks = ({ tasks, onDelete, onComplete, setTasks, prioritiesDefault, categoriesDefault }) => {
   const [dragging, setDragging] = useState(false)
   const dragItem = useRef()
   const dragItemNode = useRef()
@@ -62,6 +62,8 @@ const Tasks = ({ tasks, onDelete, onComplete, setTasks }) => {
             handleDragStart={handleDragStart}
             handleDragEnter={handleDragEnter}
             getStyles={getStyles}
+            priorities={prioritiesDefault}
+            categories={categoriesDefault}
           />
         ))}
       </ul>
