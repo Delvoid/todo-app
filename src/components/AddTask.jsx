@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault }) => {
+const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault, show }) => {
   const [categoriesList, setCategoriesList] = useState(categoriesDefault)
   const [prioritiesList, setPrioritiesList] = useState(prioritiesDefault)
   // FORM
@@ -15,6 +15,7 @@ const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault }) => {
   useEffect(() => {
     setTextError(textError)
   }, [textError])
+
   const onSubmit = (e) => {
     e.preventDefault()
     setSubmited(true)
@@ -28,10 +29,8 @@ const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault }) => {
       completed: false,
       creadted_at: new Date(),
     }
-    console.log('task: ')
-    console.log(task)
+
     if (isValid) {
-      console.log('task added')
       addTask(task)
       setText('')
       setCategory('DEFAULT')
@@ -101,7 +100,7 @@ const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault }) => {
     return isValid
   }
   return (
-    <form className="addTask" onSubmit={onSubmit}>
+    <form className={`addTask slide-in`} onSubmit={onSubmit}>
       <div className="add-input gap20">
         <div className="form__group">
           <input

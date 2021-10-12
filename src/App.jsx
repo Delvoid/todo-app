@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-
+import { FaPlus, FaTimes } from 'react-icons/fa'
 import AddTask from './components/AddTask'
-
 import Tasks from './components/Tasks'
 
 import './App.css'
@@ -18,6 +17,7 @@ const categoriesDefault = [
 
 function App() {
   const [tasks, setTasks] = useState([])
+  const [showTaskCreate, setShowTaskCreate] = useState(false)
 
   useEffect(() => {
     const getTasks = () => {
@@ -55,14 +55,38 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <header className="header">TODO</header>
+        <header className="header">
+          TODO
+          {showTaskCreate ? (
+            <div className="add-circle hide" onClick={() => setShowTaskCreate(!showTaskCreate)}>
+              <FaTimes
+                style={{
+                  color: '#fff',
+                  fontSize: '18px',
+                }}
+              />
+            </div>
+          ) : (
+            <div className="add-circle" onClick={() => setShowTaskCreate(!showTaskCreate)}>
+              <FaPlus
+                style={{
+                  color: '#fff',
+                  fontSize: '18px',
+                }}
+              />
+            </div>
+          )}
+        </header>
 
-        <AddTask
-          addTask={addTask}
-          tasks={tasks}
-          categoriesDefault={categoriesDefault}
-          prioritiesDefault={prioritiesDefault}
-        />
+        {showTaskCreate && (
+          <AddTask
+            addTask={addTask}
+            tasks={tasks}
+            categoriesDefault={categoriesDefault}
+            prioritiesDefault={prioritiesDefault}
+            show={showTaskCreate}
+          />
+        )}
         <section>
           <header className="text-primary tasks-header">Categories</header>
           <div className="categories">
