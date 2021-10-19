@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+
+import Categories from './components/Categories'
+
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import AddTask from './components/AddTask'
 import Tasks from './components/Tasks'
@@ -18,15 +21,29 @@ const categoriesDefault = [
 function App() {
   const [tasks, setTasks] = useState([])
   const [showTaskCreate, setShowTaskCreate] = useState(false)
+  const [filter, setFilter] = useState('')
+  const [filteredTasks, setFilteredTasks] = useState([])
 
   useEffect(() => {
     const getTasks = () => {
       const tasks = fetchTasks()
       if (!tasks) return
       setTasks(tasks)
+      setFilteredTasks(tasks)
     }
     getTasks()
   }, [])
+  useEffect(() => {
+    const filteredTasks = () => {
+      if (!tasks) return
+      if (!filter) return setFilteredTasks(tasks)
+      const filtered = tasks.filter((task) => {
+        return task.category === filter
+      })
+      setFilteredTasks(filtered)
+    }
+    filteredTasks()
+  }, [filter, tasks])
 
   const fetchTasks = () => {
     const tasks = JSON.parse(localStorage.getItem('tasks'))
@@ -51,18 +68,23 @@ function App() {
     setTasks(deleteTask)
     localStorage.setItem('tasks', JSON.stringify([...deleteTask]))
   }
+  const getCategoryName = (index) => {
+    console.log(categoriesDefault[filter].name)
+    return categoriesDefault[filter].name
+  }
 
   return (
     <div className="App">
       <div className="container">
         <header className="header">
-          TODO
+          <h1>Todo List</h1>
           {showTaskCreate ? (
             <div className="add-circle hide" onClick={() => setShowTaskCreate(!showTaskCreate)}>
               <FaTimes
                 style={{
                   color: '#fff',
-                  fontSize: '18px',
+                  fontSize: '24px',
+                  padding: '2px',
                 }}
               />
             </div>
@@ -71,7 +93,8 @@ function App() {
               <FaPlus
                 style={{
                   color: '#fff',
-                  fontSize: '18px',
+                  fontSize: '24px',
+                  padding: '2px',
                 }}
               />
             </div>
@@ -84,40 +107,38 @@ function App() {
             tasks={tasks}
             categoriesDefault={categoriesDefault}
             prioritiesDefault={prioritiesDefault}
-            show={showTaskCreate}
           />
         )}
-        <section>
-          <header className="text-primary tasks-header">Categories</header>
-          <div className="categories">
-            <div className="category">
-              <div className="text-primary">40 Tasks</div>
-              <div className="category-text">Personal</div>
-              <div className="progress-bar">
-                <div className="progress-percent-purple"></div>
-              </div>
-            </div>
-            <div className="category">
-              <div className="text-primary">10 Tasks</div>
-              <div className="category-text">Work</div>
-              <div className="progress-bar">
-                <div className="progress-percent-blue"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="tasks">
-          {tasks && tasks.length > 0 ? (
+        <Categories
+          tasks={tasks}
+          categories={categoriesDefault}
+          filter={filter}
+          setFilter={setFilter}
+        />
+
+        <section id="tasks" className="tasks">
+          {filteredTasks?.length > 0 ? (
             <Tasks
-              tasks={tasks}
+              tasks={filteredTasks}
               onDelete={deleteTask}
               onComplete={completeTask}
               setTasks={setTasks}
+              setFilteredTasks={setFilteredTasks}
               categoriesDefault={categoriesDefault}
               prioritiesDefault={prioritiesDefault}
+              filter={filter}
             />
           ) : (
-            'No Tasks'
+            <div className="text-primary tasks-header">
+              {showTaskCreate && setShowTaskCreate(false)}
+              No {filter && categoriesDefault[filter].name} Tasks - Create one!
+              <AddTask
+                addTask={addTask}
+                tasks={tasks}
+                categoriesDefault={categoriesDefault}
+                prioritiesDefault={prioritiesDefault}
+              />
+            </div>
           )}
         </section>
       </div>

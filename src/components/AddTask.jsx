@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault, show }) => {
+const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault }) => {
   const [categoriesList, setCategoriesList] = useState(categoriesDefault)
   const [prioritiesList, setPrioritiesList] = useState(prioritiesDefault)
   // FORM

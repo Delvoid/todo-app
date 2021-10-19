@@ -2,13 +2,22 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import Task from './Task'
 
-const Tasks = ({ tasks, onDelete, onComplete, setTasks, prioritiesDefault, categoriesDefault }) => {
+const Tasks = ({
+  tasks,
+  onDelete,
+  onComplete,
+  setTasks,
+  prioritiesDefault,
+  categoriesDefault,
+  setFilteredTasks,
+  filter,
+}) => {
   const [dragging, setDragging] = useState(false)
   const dragItem = useRef()
   const dragItemNode = useRef()
 
   useEffect(() => {
-    setTasks(tasks)
+    setFilteredTasks(tasks)
   }, [tasks])
 
   const handleDragStart = (e, item) => {
@@ -48,7 +57,9 @@ const Tasks = ({ tasks, onDelete, onComplete, setTasks, prioritiesDefault, categ
 
   return (
     <>
-      <header className="text-primary tasks-header">Todays Task's</header>
+      <header className="text-primary tasks-header">
+        Todays {filter && categoriesDefault[filter].name} Task's
+      </header>
       <ul className="dnd">
         {tasks.map((task, i) => (
           <Task

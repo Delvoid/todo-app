@@ -27,7 +27,9 @@ const Task = ({
             }
           : null
       }
-      className={`task dnd-item ${dragging ? getStyles({ taskI }) : ''} ${deleting ? 'fade' : ''}`}
+      className={`task dnd-item ${task.completed ? 'complete' : ''} ${
+        dragging ? getStyles({ taskI }) : ''
+      } ${deleting ? 'fade' : ''}`}
     >
       <div className="task-complete ">
         {task.completed ? (
@@ -45,7 +47,7 @@ const Task = ({
           />
         )}
       </div>
-      <div className="task-text">{task.text}</div>
+      <div className={`task-text ${task.completed ? 'complete' : ''}`}>{task.text}</div>
       <div className="task-delete">
         <div
           onClick={() => {
@@ -55,7 +57,7 @@ const Task = ({
           }}
           className="task-delete"
         >
-          <FaTrashAlt style={{ color: '#d8000c', cursor: 'pointer', fontSize: '18px' }} />
+          <FaTrashAlt style={{ color: '#728ede', cursor: 'pointer', fontSize: '18px' }} />
         </div>
       </div>
     </li>
