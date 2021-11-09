@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const Categories = ({ tasks, categories, filter, setFilter }) => {
+const Categories = ({ tasks, categories, filter, setFilter, showToast }) => {
   const [catStats, setCatStats] = useState([])
 
   useEffect(() => {
@@ -26,21 +26,13 @@ const Categories = ({ tasks, categories, filter, setFilter }) => {
         color: cat.color,
       }
 
+      if (category.completePer === 100 && category.taskCount > 0)
+        showToast('info', `All ${category.name} tasks have been completen`)
+
       return category
     })
     return stats
   }
-  const completePer = (catI) => {
-    let complete = 0
-    const filtered = tasks.filter((task) => {
-      if (Number(task.category) === +catI && task.completed === true) complete++
-      return Number(task.category) === +catI
-    })
-    console.log(filtered)
-    console.log(complete)
-    return Math.floor((complete / filtered.length) * 100)
-  }
-
   const handleFilter = (i) => {
     if (filter === i) return setFilter('')
     setFilter(i)

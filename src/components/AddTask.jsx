@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault }) => {
+const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault, showToast }) => {
   const [categoriesList, setCategoriesList] = useState(categoriesDefault)
   const [prioritiesList, setPrioritiesList] = useState(prioritiesDefault)
   // FORM
@@ -71,6 +71,7 @@ const AddTask = ({ addTask, tasks, prioritiesDefault, categoriesDefault }) => {
     }
 
     setTextError(textError)
+    if (!isValid) showToast('danger', 'Please input valid data')
 
     return isValid
   }

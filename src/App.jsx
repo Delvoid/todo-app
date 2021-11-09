@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
 
+import Toast from './components/Toast'
 import Categories from './components/Categories'
-
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import AddTask from './components/AddTask'
 import Tasks from './components/Tasks'
+import checkIcon from './images/check.svg'
+import errorIcon from './images/error.svg'
+import warningIcon from './images/warning.svg'
+import infoIcon from './images/info.svg'
 
 import './App.css'
 
@@ -19,6 +23,7 @@ const categoriesDefault = [
 ]
 
 function App() {
+  const [toastList, setToastList] = useState([])
   const [tasks, setTasks] = useState([])
   const [showTaskCreate, setShowTaskCreate] = useState(false)
   const [filter, setFilter] = useState('')
@@ -53,6 +58,7 @@ function App() {
   const addTask = (task) => {
     setTasks([...tasks, task])
     localStorage.setItem('tasks', JSON.stringify([...tasks, task]))
+    showToast('success', 'Task has been added')
   }
   const completeTask = (task) => {
     const completeTask = tasks.map((t) =>
@@ -60,21 +66,68 @@ function App() {
     )
     setTasks([...completeTask])
     localStorage.setItem('tasks', JSON.stringify([...completeTask]))
+    showToast('success', `Task ${task.completed ? 'updated' : 'complete'}`)
   }
 
   const deleteTask = (id) => {
     const deleteTask = tasks.filter((task) => task.id !== id)
-    console.log(deleteTask)
     setTasks(deleteTask)
     localStorage.setItem('tasks', JSON.stringify([...deleteTask]))
+    showToast('danger', 'Task deleten')
   }
-  const getCategoryName = (index) => {
-    console.log(categoriesDefault[filter].name)
-    return categoriesDefault[filter].name
+
+  const showToast = (type, message) => {
+    const id = Math.floor(Math.random() * 101 + 1)
+    let toastProperties
+
+    switch (type) {
+      case 'success':
+        toastProperties = {
+          id,
+          title: 'Success',
+          description: message || 'This is a success toast component',
+          backgroundColor: '#5cb85c',
+          icon: checkIcon,
+        }
+        break
+      case 'danger':
+        toastProperties = {
+          id,
+          title: 'Danger',
+          description: message || 'This is a error toast component',
+          backgroundColor: '#d9534f',
+          icon: errorIcon,
+        }
+        break
+      case 'info':
+        toastProperties = {
+          id,
+          title: 'Info',
+          description: message || 'This is an info toast component',
+          backgroundColor: '#5bc0de',
+          icon: infoIcon,
+        }
+        break
+      case 'warning':
+        toastProperties = {
+          id,
+          title: 'Warning',
+          description: message || 'This is a warning toast component',
+          backgroundColor: '#f0ad4e',
+          icon: warningIcon,
+        }
+        break
+
+      default:
+        setToastList([])
+    }
+
+    setToastList([...toastList, toastProperties])
   }
 
   return (
     <div className="App">
+      <Toast position="bottom-right" toastList={toastList} setToastList={setToastList} />
       <div className="container">
         <header className="header">
           <h1>Todo List</h1>
@@ -107,6 +160,7 @@ function App() {
             tasks={tasks}
             categoriesDefault={categoriesDefault}
             prioritiesDefault={prioritiesDefault}
+            showToast={showToast}
           />
         )}
         <Categories
@@ -114,6 +168,7 @@ function App() {
           categories={categoriesDefault}
           filter={filter}
           setFilter={setFilter}
+          showToast={showToast}
         />
 
         <section id="tasks" className="tasks">
